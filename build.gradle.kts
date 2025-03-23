@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "net.pitan76"
-version = "1.0"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -30,7 +30,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/PTOM76/PukiBot-Java")
+            url = uri("https://maven.pkg.github.com/PTOM76/maven")
             credentials {
                 username = project.findProperty("gpr.user") as String?
                 password = project.findProperty("gpr.key") as String?
