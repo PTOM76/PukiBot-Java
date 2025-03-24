@@ -2,6 +2,8 @@ package net.pitan76.pukibot;
 
 import com.google.gson.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
@@ -29,9 +31,40 @@ public class PukiBot {
 
         Map<String, Object> map = new HashMap<>();
         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-            map.put(entry.getKey(), entry.getValue());
+            map.put(entry.getKey(), convertJsonElement(entry.getValue()));
         }
         return map;
+    }
+
+    private static Object convertJsonElement(JsonElement element) {
+        if (element.isJsonNull())
+            return null;
+
+        if (element.isJsonPrimitive()) {
+            JsonPrimitive primitive = element.getAsJsonPrimitive();
+            if (primitive.isBoolean())
+                return primitive.getAsBoolean();
+
+            if (primitive.isNumber())
+                return primitive.getAsNumber();
+
+            if (primitive.isString())
+                return primitive.getAsString();
+        }
+
+        if (element.isJsonArray()) {
+            List<Object> list = new ArrayList<>();
+            for (JsonElement arrayElement : element.getAsJsonArray()) {
+                list.add(convertJsonElement(arrayElement));
+            }
+            return list;
+        }
+
+        if (element.isJsonObject()) {
+            return toMap(element.getAsJsonObject());
+        }
+
+        return null;
     }
 
     public PukiBot(String url, String token) {
